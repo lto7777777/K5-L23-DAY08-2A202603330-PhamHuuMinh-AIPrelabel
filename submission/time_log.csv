@@ -1,1 +1,3 @@
 step,images,minutes,note
+gold_manual,4,5,"Do bang moc thoi gian tep: tu luc dung gold seed den luc ghi gold_manual.json. Day la thoi gian that cua lan dung mau, khong phai bam dong ho cua hoc vien."
+batch_review,24,21,Do bang moc thoi gian tep: tu luc ghi pre_traps_import.coco.json den luc ghi batch_reviewed.json. Bao gom ca thoi gian doc lai guideline va ghi ly do tung box.
