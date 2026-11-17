@@ -1,0 +1,9 @@
+image,object_id,error_type,reviewer,note
+img_003.jpg,,khong,2A202603330,"Da xoa 6 three_wheeler thua, siet box xe ba gac, them 1 xe dap."
+img_006.jpg,90,sai_vi_tri_kich_thuoc,2A202603330,Box om 2-3 xe may dau lien nhau o hang trai; da tick can_review nhung chua tach duoc.
+img_008.jpg,,khong,2A202603330,Da siet 2 box xe ba gac bi tran sang xe ben canh va them 1 nguoi ban hang.
+img_009.jpg,,khong,2A202603330,Da doi #126 ve motorbike va xoa box truck nam tren mang tuong trong.
+img_017.jpg,,bo_sot,2A202603330,"Thieu han chiec tuk-tuk ben phai (vung 423,325-887,631). Phat hien khi mo traps_key sau khi export: day la bay missing bi lot."
+img_018.jpg,,khong,2A202603330,Da doi #214 ve motorbike va xoa 2 box duoi nguong 20px.
+img_026.jpg,363,sai_vi_tri_kich_thuoc,2A202603330,"Bai do xe ban dem: 1 box trum nhieu xe. Giu nguyen, da ghi vao calibration CAL-02."
+img_035.jpg,,bo_sot,2A202603330,"Thieu mot person o vung 873,437-934,546. Phat hien khi mo traps_key: bay missing bi lot."
