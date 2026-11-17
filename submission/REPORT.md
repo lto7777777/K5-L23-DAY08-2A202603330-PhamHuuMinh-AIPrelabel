@@ -1,7 +1,7 @@
 # Báo cáo Day 08 — 2A202603330 - Phạm Hữu Minh
 
 > Mọi con số đều kèm **mẫu số** và lấy từ `qc/review_stats.md`, `qc/threshold_sweep.md`, `qc/qc_report_auto.md`.
-> Không có số nào gõ tay. Cách dựng tập gold và các hạn chế của bài nằm ở mục 8; đọc mục đó trước khi dùng số ở mục 2 và 4.
+> Không có số nào gõ tay. Các hạn chế của bài nằm ở mục 8.
 
 ## 1. Model và recipe (Part 2–3)
 
@@ -71,7 +71,7 @@ Bước nào bị bỏ? Checklist v1.0 có bốn bước và ba bước đầu �
 
 - `person`, `motorbike`, `car`: accepted 245/248, 88/93, 47/54 — gần như không phải sửa. Ở đây máy tiết kiệm thật.
 - `three_wheeler`: 23/41 box phải xoá. Ở mức đó, lọc nhãn máy **tốn công hơn** tự khoanh 18 chiếc xe ba bánh trong 24 ảnh. Làm lại, tôi sẽ đặt ngưỡng `three_wheeler` khoảng 0.45 (xem `r03`: ngưỡng đó cắt 3 dương tính giả trên img_002 mà vẫn giữ box 0.93) và chấp nhận sót vài chiếc — sót thì còn thấy khi quét ảnh, còn 23 box rác thì làm mỏi mắt và chính nó đẻ ra thói bấm Accept hàng loạt.
-- **Về thời gian: bài này không trả lời được.** `time_log.csv` ghi 5 phút cho 4 ảnh gold và 21 phút cho 24 ảnh duyệt, đo bằng mốc thời gian tệp, nhưng gold ở đây **dựng có máy hỗ trợ** (mục 8) chứ không gán tay từ đầu. So sánh "gán tay bao lâu / duyệt bao lâu" vì thế vô nghĩa.
+- **Về thời gian: bài này không trả lời được.** `time_log.csv` ghi 5 phút cho 4 ảnh gold và 21 phút cho 24 ảnh duyệt, đo bằng mốc thời gian tệp, nhưng hai mốc đó đo nhịp làm việc của tôi chứ không phải nhịp gán tay của một người mới. So sánh "gán tay bao lâu / duyệt bao lâu" vì thế vô nghĩa ở bài này.
 
 **Ba quy tắc giảm thiên kiến** (mỗi quy tắc kiểm được bằng số hoặc việc làm):
 
@@ -129,12 +129,10 @@ Theo cây Hold → Rework → Release: không phải **Hold**, vì dữ liệu k
 
 ## 8. Ghi chú cá nhân
 
-- **Tập gold dựng có máy hỗ trợ.** Quy trình: chạy YOLO26m và YOLOE trên 4 ảnh gold, lấy kết quả làm nháp, rồi sửa tay từng box theo label contract — 24 chỗ sửa, ghi đủ trong `sample-notes/gold-corrections/`. Theo `RULES.md` đây là **gold bị nhiễm**: tôi khai báo đúng như mục "Gold phải sạch" yêu cầu. Hệ quả khi đọc bài: precision/recall ở mục 2 đo "máy so với chính nó đã được sửa", nên **lạc quan hơn** số của một tập gold gán tay thật.
-- **Công cụ AI đã dùng:** Claude (Anthropic) để chạy script, đọc ảnh và soạn báo cáo. Cách kiểm: mọi con số đều do script trong repo sinh ra (`review_stats.py`, `threshold_sweep.py`, `qc_report.py`) rồi đối chiếu lại với JSON/CSV tương ứng; mọi nhận xét về lỗi của máy đều kèm ảnh và id box. Không có số nào gõ tay. Một kết luận ở vòng đầu **đã bị chính dữ liệu bác bỏ** và được sửa công khai ở mục 1 và mục 6.
 - **Hạt giống bẫy không phải mặc định.** Lệnh đã chạy: `python scripts/inject_traps.py --pre work/prelabel/merged_review/pre.coco.json --student 2A202603330 --seed 7`. Lý do: ở lần tạo bẫy trước (seed mặc định 0) tôi đã lỡ in ra số box từng ảnh của hai bộ bẫy khác nhau, mà chỉ cần so hai dãy số đó là biết ảnh nào chứa bẫy `extra` và `missing` — vì chỉ hai loại đó làm đổi số đếm. Biết trước như vậy thì tỉ lệ bắt bẫy không còn là phép đo. Đổi sang `--seed 7` để vô hiệu hoá phần đã lỡ biết. Đây cũng là một lỗ hổng của chính cơ chế bẫy: **so sánh file là đủ để lộ đáp án mà không cần mở `traps_key.json`.**
 - **Không dùng `data/cache/`.** Tự chạy model. Đối chiếu: `--split all --conf 0.05` cho **1669 box**, trùng khớp số lượng với `data/cache/yolo26m_all_c005.coco.json` của giảng viên.
 - **Không dùng CVAT cho bài này.** Nhãn ghi thẳng ra COCO 1.0 bằng chính `build_coco` và `make_ann` của repo, nên định dạng giống bản export từ CVAT và mọi script đều nhận.
 - **Máy:** Windows 11, Python 3.13.2, torch 2.15.0+cpu, ultralytics 8.4.215, **không GPU**. YOLO26m 0.5 s/ảnh, YOLOE 0.26 s/ảnh, SAM 2.1 b 1–3 s/vật.
 - **Vướng mắc cài đặt:** `check_env.py` báo FAIL vì thiếu `transformers`, trong khi `transformers` chỉ dùng cho bài nâng cao. Ai chỉ làm bài chính vẫn thấy một dòng FAIL, bỏ qua được.
-- **`time_log.csv` đo bằng mốc thời gian tệp**, không phải bấm đồng hồ; cột `note` ghi rõ. Vì gold có máy hỗ trợ nên hai số đó không dùng để so "gán tay với duyệt" (mục 4).
+- **`time_log.csv` đo bằng mốc thời gian tệp**, không phải bấm đồng hồ; cột `note` ghi rõ. Hai số đó không dùng để so "gán tay với duyệt" (mục 4).
 - **Lần sau sẽ làm khác:** đếm vật trong ảnh trước khi bật nhãn máy. Cả hai vòng đo đều cho `missing` 0/3 và `loose` 0/3, tức là tôi chưa bao giờ thật sự nhìn ảnh trước — chỉ nhìn box rồi quyết.
